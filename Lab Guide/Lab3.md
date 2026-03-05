@@ -212,3 +212,5 @@ Observe how addresses increase sequentially.
 # Conclusion
 
 Dynamic arrays allow programs to allocate memory during runtime, making them useful when data size is unknown in advance. However, heap memory must be carefully managed to avoid leaks and memory errors.
+
+The use of malloc and free has many pitfalls, such as memory leaks and exceptions. To avoid these kinds of leaks and exception problems altogether, use the mechanisms that are provided by the C++ Standard Library (STL). These include [shared_ptr](https://learn.microsoft.com/en-us/cpp/standard-library/shared-ptr-class?view=msvc-170), [unique_ptr](https://learn.microsoft.com/en-us/cpp/standard-library/unique-ptr-class?view=msvc-170), and [vector](https://learn.microsoft.com/en-us/cpp/standard-library/vector?view=msvc-170). For more information, see [Smart Pointers](https://learn.microsoft.com/en-us/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170) and [C++ Standard Library](https://learn.microsoft.com/en-us/cpp/standard-library/cpp-standard-library-reference?view=msvc-170).
