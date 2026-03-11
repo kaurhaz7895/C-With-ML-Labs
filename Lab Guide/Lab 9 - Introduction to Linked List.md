@@ -1,4 +1,4 @@
-# C++ Linked List Guide — Concepts, Implementation, STL, and Use Cases
+# Lab 9: Introduction to Linked List — Concepts, Implementation, and Use Cases
 
 A **Linked List** is a dynamic data structure where elements are stored in **nodes connected using pointers**.  
 Unlike arrays, nodes are **not stored in contiguous memory**.
