@@ -1,4 +1,4 @@
-# C++ Lab Guide --- Working with `std::vector`
+# Lab 6 - Working with `std::vector`
 
 ## Objective
 
