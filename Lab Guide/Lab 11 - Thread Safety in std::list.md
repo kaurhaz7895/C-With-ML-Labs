@@ -319,7 +319,28 @@ Thread 2 acquires lock
 
 ---
 
-# 10. Summary
+# 10. Visualization — Thread Execution Timeline
+
+Example execution timeline with mutex protection:
+
+```
+Time →
+
+Thread 1:  LOCK ─── Critical Section ─── UNLOCK
+Thread 2:          WAIT ─────────────── LOCK ── Critical Section ── UNLOCK
+Thread 3:          WAIT ─────────────── WAIT ─────────────── LOCK ── Critical Section
+```
+
+Explanation:
+
+- Thread 1 acquires the mutex first.
+- Thread 2 and Thread 3 must wait.
+- Once Thread 1 releases the lock, another thread can enter the critical section.
+
+This ensures **data consistency but reduces parallelism**.
+
+---
+# Summary
 
 ### Key Points
 
