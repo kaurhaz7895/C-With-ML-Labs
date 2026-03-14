@@ -2,18 +2,18 @@
 
 ## Table of Contents
 
-1. [Objective](#objective)
-2. [Binary Search Tree Overview](#binary-search-tree-overview)
-3. [BST Properties](#bst-properties)
-4. [Traversal Concepts](#traversal-concepts)
-5. [Traversal Types](#traversal-types)
-6. [Industry Use Cases](#industry-use-cases)
-7. [BST Demonstration Program](#bst-demonstration-program)
-8. [Expected Output](#expected-output)
-9. [Visual Understanding of Traversals](#visual-understanding-of-traversals)
-10. [Exercises](#exercises)
-11. [Challenge Problems](#challenge-problems)
-12. [Key Takeaways](#key-takeaways)
+1. [Objective](#1-objective)
+2. [Binary Search Tree Overview](#2-binary-search-tree-overview)
+3. [BST Properties](#3-bst-properties)
+4. [Traversal Concepts](#4-traversal-concepts)
+5. [Traversal Types](#5-traversal-types)
+6. [Industry Use Cases](#6-industry-use-cases)
+7. [BST Demonstration Program](#7-bst-demonstration-program)
+8. [Expected Output](#8-expected-output)
+9. [Visual Understanding of Traversals](#9-visual-understanding-of-traversals)
+10. [Exercises](#10-exercises)
+11. [Challenge Problems](#11-challenge-problems)
+12. [Key Takeaways](#12-key-takeaways)
 
 
 ------------------------------------------------------------------------
