@@ -1,4 +1,4 @@
-# AVL Tree Lab (C++)
+# Lab 03 - Working with AVL Trees in C++
 
 ## Table of Contents
 
@@ -7,99 +7,102 @@
 -   [3. Need for AVL Trees](#3-need-for-avl-trees)
 -   [4. Height Calculation](#4-height-calculation)
 -   [5. Balance Factor](#5-balance-factor)
--   [6. AVL Rotation Cases](#6-avl-rotation-cases)
-    -   [6.1 LL Rotation (Right
-        Rotation)](#61-ll-rotation-right-rotation)
-    -   [6.2 RR Rotation (Left Rotation)](#62-rr-rotation-left-rotation)
-    -   [6.3 LR Rotation (Left‑Right
-        Rotation)](#63-lr-rotation-leftright-rotation)
-    -   [6.4 RL Rotation (Right‑Left
-        Rotation)](#64-rl-rotation-rightleft-rotation)
--   [7. AVL Tree Implementation in C++](#7-avl-tree-implementation-in-c)
--   [8. Example Execution](#8-example-execution)
--   [9. Visual Representation of
-    Output](#9-visual-representation-of-output)
--   [10. Complexity Analysis](#10-complexity-analysis)
+-   [6. Rotation Detection Rule Chart](#6-rotation-detection-rule-chart)
+-   [7. AVL Rotation Cases](#7-avl-rotation-cases)
+    -   [LL Rotation](#ll-rotation)
+    -   [RR Rotation](#rr-rotation)
+    -   [LR Rotation](#lr-rotation)
+    -   [RL Rotation](#rl-rotation)
+-   [8. AVL Tree Implementation in C++](#8-avl-tree-implementation-in-c)
+-   [9. Example Execution](#9-example-execution)
+-   [10. Visual Representation](#10-visual-representation)
+-   [11. Complexity Analysis](#11-complexity-analysis)
 
 ------------------------------------------------------------------------
 
 # 1. Introduction
 
-Binary Search Trees (BST) allow efficient searching, insertion, and
-deletion operations.
+Binary Search Trees provide efficient operations when balanced.\
+However, if keys are inserted in sorted order, the tree becomes
+**skewed**.
 
-However, if nodes are inserted in sorted order, the BST becomes
-**skewed**, degrading performance.
+AVL Trees automatically rebalance themselves after insertion or
+deletion.
 
-AVL Trees automatically **maintain balance after each insertion or
-deletion**.
+AVL stands for:
 
-AVL stands for **Adelson‑Velsky and Landis (1962)**.
+Adelson‑Velsky and Landis (1962)
+
+They introduced the first **self‑balancing Binary Search Tree**.
 
 ------------------------------------------------------------------------
 
 # 2. Definition of AVL Tree
 
-An **AVL Tree** is a self‑balancing Binary Search Tree in which the
-difference between the heights of left and right subtrees of any node is
-at most **1**.
+An AVL Tree is a Binary Search Tree where the difference between heights
+of left and right subtrees is at most **1**.
 
-Balance Factor formula:
+Balance Factor:
 
-    BF = height(left subtree) − height(right subtree)
+    BF = height(left) − height(right)
 
 Allowed values:
 
     -1, 0, +1
 
-If the balance factor becomes **±2**, the tree is rebalanced using
-**rotations**.
+If the balance factor becomes **+2 or −2**, rotations are performed.
 
 ------------------------------------------------------------------------
 
 # 3. Need for AVL Trees
 
-Consider inserting sorted values into a normal BST.
-
-Insert:
+Example BST insertion:
 
     10, 20, 30, 40
 
-BST becomes:
+Skewed BST:
 
-    10
-      \
-      20
-        \
-        30
-          \
-          40
+``` mermaid
+graph TD
+10 --> 20
+20 --> 30
+30 --> 40
+```
 
-Height becomes **n**, so searching becomes **O(n)**.
+Height becomes **n**.
+
+Search complexity:
+
+    O(n)
 
 Balanced AVL tree:
 
-          20
-         /  \
-       10    30
-               \
-                40
+``` mermaid
+graph TD
+20 --> 10
+20 --> 30
+30 --> 40
+```
 
-Search complexity remains **O(log n)**.
+Search complexity remains:
+
+    O(log n)
 
 ------------------------------------------------------------------------
 
 # 4. Height Calculation
 
-Height of a node:
+Height formula:
 
     height(node) = 1 + max(height(left), height(right))
 
 Example:
 
-          20
-         /  \
-       10    30
+``` mermaid
+graph TD
+20 --> 10
+20 --> 30
+```
 
 Heights:
 
@@ -111,165 +114,163 @@ Heights:
 
 # 5. Balance Factor
 
-Balance factor determines whether the tree is balanced.
-
     BF = height(left) − height(right)
 
   Balance Factor   Meaning
-  ---------------- ----------------------
+  ---------------- --------------------
   0                Perfectly balanced
-  +1               Slightly left heavy
-  -1               Slightly right heavy
-  +2 / -2          Rotation required
+  +1               Left heavy
+  -1               Right heavy
+  +2 or -2         Rotation required
 
 ------------------------------------------------------------------------
 
-# 6. AVL Rotation Cases
+# 6. Rotation Detection Rule Chart
 
-Four types of imbalance may occur.
+This table helps identify which rotation is required.
+
+  Condition                       Case   Rotation
+  ------------------------------- ------ -----------------------------------
+  BF \> 1 and key \< left.key     LL     Right Rotation
+  BF \< -1 and key \> right.key   RR     Left Rotation
+  BF \> 1 and key \> left.key     LR     Left rotation then Right rotation
+  BF \< -1 and key \< right.key   RL     Right rotation then Left rotation
+
+Students can use this rule during **manual tracing of AVL insertion**.
 
 ------------------------------------------------------------------------
 
-## 6.1 LL Rotation (Right Rotation)
+# 7. AVL Rotation Cases
 
-Occurs when insertion happens in the **left subtree of the left child**.
+## LL Rotation
 
-Insert:
-
-    30, 20, 10
+Insertion occurs in **left subtree of left child**.
 
 Before:
 
-        30
-       /
-     20
-     /
-    10
+``` mermaid
+graph TD
+30 --> 20
+20 --> 10
+```
 
 After rotation:
 
-        20
-       /  \
-     10   30
+``` mermaid
+graph TD
+20 --> 10
+20 --> 30
+```
 
 ------------------------------------------------------------------------
 
-## 6.2 RR Rotation (Left Rotation)
+## RR Rotation
 
-Occurs when insertion happens in the **right subtree of the right
-child**.
-
-Insert:
-
-    10, 20, 30
+Insertion occurs in **right subtree of right child**.
 
 Before:
 
-    10
-      \
-      20
-        \
-        30
+``` mermaid
+graph TD
+10 --> 20
+20 --> 30
+```
 
 After rotation:
 
-        20
-       /  \
-     10   30
+``` mermaid
+graph TD
+20 --> 10
+20 --> 30
+```
 
 ------------------------------------------------------------------------
 
-## 6.3 LR Rotation (Left‑Right Rotation)
+## LR Rotation
 
-Occurs when insertion happens in the **right subtree of the left
-child**.
-
-Insert:
-
-    30, 10, 20
+Insertion occurs in **right subtree of left child**.
 
 Before:
 
-         30
-        /
-      10
-        \
-         20
+``` mermaid
+graph TD
+30 --> 10
+10 --> 20
+```
 
-Step 1 --- Left rotation on 10
+Step 1 (Left rotation):
 
-         30
-        /
-       20
-      /
-    10
+``` mermaid
+graph TD
+30 --> 20
+20 --> 10
+```
 
-Step 2 --- Right rotation on 30
+Step 2 (Right rotation):
 
-         20
-        /  \
-      10    30
+``` mermaid
+graph TD
+20 --> 10
+20 --> 30
+```
 
 ------------------------------------------------------------------------
 
-## 6.4 RL Rotation (Right‑Left Rotation)
+## RL Rotation
 
-Occurs when insertion happens in the **left subtree of the right
-child**.
-
-Insert:
-
-    10, 30, 20
+Insertion occurs in **left subtree of right child**.
 
 Before:
 
-    10
-      \
-       30
-      /
-    20
+``` mermaid
+graph TD
+10 --> 30
+30 --> 20
+```
 
-Step 1 --- Right rotation on 30
+Step 1 (Right rotation):
 
-    10
-      \
-       20
-         \
-          30
+``` mermaid
+graph TD
+10 --> 20
+20 --> 30
+```
 
-Step 2 --- Left rotation on 10
+Step 2 (Left rotation):
 
-         20
-        /  \
-      10    30
+``` mermaid
+graph TD
+20 --> 10
+20 --> 30
+```
 
 ------------------------------------------------------------------------
 
-# 7. AVL Tree Implementation in C++
+# 8. AVL Tree Implementation in C++
 
 ``` cpp
 #include <iostream>
 using namespace std;
 
-class Node {
+class Node{
 public:
     int key;
-    Node *left;
-    Node *right;
+    Node* left;
+    Node* right;
     int height;
 };
 
-int height(Node *n) {
-    if(n == NULL)
+int height(Node* n){
+    if(n==NULL)
         return 0;
     return n->height;
 }
 
-int max(int a,int b) {
+int max(int a,int b){
     return (a>b)?a:b;
 }
 
-Node* newNode(int key) {
+Node* newNode(int key){
     Node* node = new Node();
     node->key = key;
     node->left = NULL;
@@ -278,41 +279,43 @@ Node* newNode(int key) {
     return node;
 }
 
-Node* rightRotate(Node *y) {
-    Node *x = y->left;
-    Node *T2 = x->right;
+Node* rightRotate(Node* y){
+
+    Node* x = y->left;
+    Node* T2 = x->right;
 
     x->right = y;
     y->left = T2;
 
-    y->height = max(height(y->left), height(y->right)) + 1;
-    x->height = max(height(x->left), height(x->right)) + 1;
+    y->height = max(height(y->left),height(y->right))+1;
+    x->height = max(height(x->left),height(x->right))+1;
 
     return x;
 }
 
-Node* leftRotate(Node *x) {
-    Node *y = x->right;
-    Node *T2 = y->left;
+Node* leftRotate(Node* x){
+
+    Node* y = x->right;
+    Node* T2 = y->left;
 
     y->left = x;
     x->right = T2;
 
-    x->height = max(height(x->left), height(x->right)) + 1;
-    y->height = max(height(y->left), height(y->right)) + 1;
+    x->height = max(height(x->left),height(x->right))+1;
+    y->height = max(height(y->left),height(y->right))+1;
 
     return y;
 }
 
-int getBalance(Node *n) {
-    if(n == NULL)
+int getBalance(Node* n){
+    if(n==NULL)
         return 0;
-    return height(n->left) - height(n->right);
+    return height(n->left)-height(n->right);
 }
 
-Node* insert(Node* node, int key) {
+Node* insert(Node* node,int key){
 
-    if(node == NULL)
+    if(node==NULL)
         return newNode(key);
 
     if(key < node->key)
@@ -326,18 +329,18 @@ Node* insert(Node* node, int key) {
 
     int balance = getBalance(node);
 
-    if(balance > 1 && key < node->left->key)
+    if(balance>1 && key < node->left->key)
         return rightRotate(node);
 
-    if(balance < -1 && key > node->right->key)
+    if(balance<-1 && key > node->right->key)
         return leftRotate(node);
 
-    if(balance > 1 && key > node->left->key) {
+    if(balance>1 && key > node->left->key){
         node->left = leftRotate(node->left);
         return rightRotate(node);
     }
 
-    if(balance < -1 && key < node->right->key) {
+    if(balance<-1 && key < node->right->key){
         node->right = rightRotate(node->right);
         return leftRotate(node);
     }
@@ -345,35 +348,34 @@ Node* insert(Node* node, int key) {
     return node;
 }
 
-void preOrder(Node *root) {
-    if(root != NULL) {
-        cout << root->key << " ";
-        preOrder(root->left);
-        preOrder(root->right);
+void preorder(Node* root){
+
+    if(root!=NULL){
+        cout<<root->key<<" ";
+        preorder(root->left);
+        preorder(root->right);
     }
 }
 
-int main() {
+int main(){
 
-    Node *root = NULL;
+    Node* root=NULL;
 
-    root = insert(root,10);
-    root = insert(root,20);
-    root = insert(root,30);
-    root = insert(root,40);
-    root = insert(root,50);
-    root = insert(root,25);
+    root=insert(root,10);
+    root=insert(root,20);
+    root=insert(root,30);
+    root=insert(root,40);
+    root=insert(root,50);
+    root=insert(root,25);
 
-    cout << "Preorder traversal of AVL tree:\n";
-    preOrder(root);
-
-    return 0;
+    cout<<"Preorder traversal of AVL tree:\n";
+    preorder(root);
 }
 ```
 
 ------------------------------------------------------------------------
 
-# 8. Example Execution
+# 9. Example Execution
 
 Inserted values:
 
@@ -381,22 +383,25 @@ Inserted values:
 
 Program output:
 
-    Preorder traversal of AVL tree:
+    Preorder traversal of AVL tree
     30 20 10 25 40 50
 
 ------------------------------------------------------------------------
 
-# 9. Visual Representation of Output
+# 10. Visual Representation
 
-            30
-           /  \
-         20    40
-        /  \     \
-       10  25     50
+``` mermaid
+graph TD
+30 --> 20
+30 --> 40
+20 --> 10
+20 --> 25
+40 --> 50
+```
 
 ------------------------------------------------------------------------
 
-# 10. Complexity Analysis
+# 11. Complexity Analysis
 
   Operation   Time Complexity
   ----------- -----------------
@@ -404,5 +409,4 @@ Program output:
   Insert      O(log n)
   Delete      O(log n)
 
-AVL trees maintain **strict balance**, ensuring logarithmic time
-complexity.
+AVL Trees maintain **strict balance**, ensuring logarithmic performance.
