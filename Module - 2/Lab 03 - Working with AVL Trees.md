@@ -252,6 +252,15 @@ graph TD
 #include <iostream>
 using namespace std;
 
+/*
+Node structure of AVL Tree
+Each node stores:
+1. key      → value of the node
+2. left     → pointer to left child
+3. right    → pointer to right child
+4. height   → height of the node
+*/
+
 class Node{
 public:
     int key;
@@ -260,116 +269,222 @@ public:
     int height;
 };
 
+/*
+Function to get height of a node
+If node is NULL → height = 0
+*/
 int height(Node* n){
-    if(n==NULL)
+    if(n == NULL)
         return 0;
     return n->height;
 }
 
+/*
+Utility function to get maximum of two numbers
+Used for height calculation
+*/
 int max(int a,int b){
-    return (a>b)?a:b;
+    return (a > b) ? a : b;
 }
 
+/*
+Create a new AVL node
+Initial height is set to 1
+because leaf node height = 1
+*/
 Node* newNode(int key){
+
     Node* node = new Node();
+
     node->key = key;
     node->left = NULL;
     node->right = NULL;
     node->height = 1;
+
     return node;
 }
+
+/*
+Right Rotation (used in LL imbalance)
+
+        y                              x
+       / \                           /   \
+      x   T3     Right Rotate      T1    y
+     / \        ------------->          / \
+    T1  T2                           T2   T3
+*/
 
 Node* rightRotate(Node* y){
 
     Node* x = y->left;
     Node* T2 = x->right;
 
+    // Perform rotation
     x->right = y;
     y->left = T2;
 
-    y->height = max(height(y->left),height(y->right))+1;
-    x->height = max(height(x->left),height(x->right))+1;
+    // Update heights
+    y->height = max(height(y->left), height(y->right)) + 1;
+    x->height = max(height(x->left), height(x->right)) + 1;
 
+    // Return new root
     return x;
 }
+
+/*
+Left Rotation (used in RR imbalance)
+
+      x                               y
+     / \                            /   \
+   T1   y        Left Rotate       x     T3
+       / \      ------------->    / \
+      T2 T3                      T1 T2
+*/
 
 Node* leftRotate(Node* x){
 
     Node* y = x->right;
     Node* T2 = y->left;
 
+    // Perform rotation
     y->left = x;
     x->right = T2;
 
-    x->height = max(height(x->left),height(x->right))+1;
-    y->height = max(height(y->left),height(y->right))+1;
+    // Update heights
+    x->height = max(height(x->left), height(x->right)) + 1;
+    y->height = max(height(y->left), height(y->right)) + 1;
 
+    // Return new root
     return y;
 }
 
+/*
+Get Balance Factor
+
+BF = height(left subtree) - height(right subtree)
+*/
+
 int getBalance(Node* n){
-    if(n==NULL)
+
+    if(n == NULL)
         return 0;
-    return height(n->left)-height(n->right);
+
+    return height(n->left) - height(n->right);
 }
 
-Node* insert(Node* node,int key){
+/*
+Insert a key into AVL tree
+This works like BST insertion first
+Then checks balance factor
+If imbalance occurs → apply rotations
+*/
 
-    if(node==NULL)
+Node* insert(Node* node, int key){
+
+    // Step 1: Perform normal BST insertion
+    if(node == NULL)
         return newNode(key);
 
     if(key < node->key)
-        node->left = insert(node->left,key);
+        node->left = insert(node->left, key);
+
     else if(key > node->key)
-        node->right = insert(node->right,key);
+        node->right = insert(node->right, key);
+
     else
-        return node;
+        return node; // duplicate keys not allowed
 
-    node->height = 1 + max(height(node->left),height(node->right));
 
+    // Step 2: Update height of current node
+    node->height = 1 + max(height(node->left), height(node->right));
+
+
+    // Step 3: Get balance factor
     int balance = getBalance(node);
 
-    if(balance>1 && key < node->left->key)
+
+    /*
+    Step 4: Check imbalance cases
+    */
+
+
+    // Case 1: LL Case
+    if(balance > 1 && key < node->left->key)
         return rightRotate(node);
 
-    if(balance<-1 && key > node->right->key)
+
+    // Case 2: RR Case
+    if(balance < -1 && key > node->right->key)
         return leftRotate(node);
 
-    if(balance>1 && key > node->left->key){
+
+    // Case 3: LR Case
+    if(balance > 1 && key > node->left->key){
+
         node->left = leftRotate(node->left);
+
         return rightRotate(node);
     }
 
-    if(balance<-1 && key < node->right->key){
+
+    // Case 4: RL Case
+    if(balance < -1 && key < node->right->key){
+
         node->right = rightRotate(node->right);
+
         return leftRotate(node);
     }
 
+
+    // return node pointer
     return node;
 }
 
+/*
+Preorder traversal of AVL tree
+Used to print tree structure
+*/
+
 void preorder(Node* root){
 
-    if(root!=NULL){
-        cout<<root->key<<" ";
+    if(root != NULL){
+
+        cout << root->key << " ";
+
         preorder(root->left);
+
         preorder(root->right);
     }
 }
 
+/*
+Driver program
+*/
+
 int main(){
 
-    Node* root=NULL;
+    Node* root = NULL;
 
-    root=insert(root,10);
-    root=insert(root,20);
-    root=insert(root,30);
-    root=insert(root,40);
-    root=insert(root,50);
-    root=insert(root,25);
+    /*
+    Insert elements into AVL tree
+    */
 
-    cout<<"Preorder traversal of AVL tree:\n";
+    root = insert(root, 10);
+    root = insert(root, 20);
+    root = insert(root, 30);
+    root = insert(root, 40);
+    root = insert(root, 50);
+    root = insert(root, 25);
+
+
+    /*
+    Print preorder traversal
+    */
+
+    cout << "Preorder traversal of AVL tree:\n";
+
     preorder(root);
+
 }
 ```
 
