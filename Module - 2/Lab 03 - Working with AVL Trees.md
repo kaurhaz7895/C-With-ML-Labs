@@ -255,35 +255,43 @@ using namespace std;
 /*
 Node structure of AVL Tree
 Each node stores:
-1. key      → value of the node
+1. data      → value of the node
 2. left     → pointer to left child
 3. right    → pointer to right child
 4. height   → height of the node
 */
 
-class Node{
+class Node {
 public:
-    int key;
-    Node* left;
-    Node* right;
-    int height;
+    int data, height;
+    Node* left, * right;
 };
 
 /*
 Function to get height of a node
 If node is NULL → height = 0
 */
-int height(Node* n){
-    if(n == NULL)
-        return 0;
+int height(Node* n) {
+    if (n == NULL)
+        return -1;
     return n->height;
 }
+void printHeights(Node* root)
+{
+    if (root == NULL)
+        return;
 
+    cout << "Node " << root->data
+        << " height = " << root->height << endl;
+
+    printHeights(root->left);
+    printHeights(root->right);
+}
 /*
 Utility function to get maximum of two numbers
 Used for height calculation
 */
-int max(int a,int b){
+int max(int a, int b) {
     return (a > b) ? a : b;
 }
 
@@ -292,14 +300,14 @@ Create a new AVL node
 Initial height is set to 1
 because leaf node height = 1
 */
-Node* newNode(int key){
+Node* newNode(int data) {
 
     Node* node = new Node();
 
-    node->key = key;
+    node->data = data;
     node->left = NULL;
     node->right = NULL;
-    node->height = 1;
+    node->height = 0;
 
     return node;
 }
@@ -314,7 +322,7 @@ Right Rotation (used in LL imbalance)
     T1  T2                           T2   T3
 */
 
-Node* rightRotate(Node* y){
+Node* rightRotate(Node* y) {
 
     Node* x = y->left;
     Node* T2 = x->right;
@@ -341,7 +349,7 @@ Left Rotation (used in RR imbalance)
       T2 T3                      T1 T2
 */
 
-Node* leftRotate(Node* x){
+Node* leftRotate(Node* x) {
 
     Node* y = x->right;
     Node* T2 = y->left;
@@ -364,35 +372,35 @@ Get Balance Factor
 BF = height(left subtree) - height(right subtree)
 */
 
-int getBalance(Node* n){
+int getBalance(Node* n) {
 
-    if(n == NULL)
+    if (n == NULL)
         return 0;
 
     return height(n->left) - height(n->right);
 }
 
 /*
-Insert a key into AVL tree
+Insert a data into AVL tree
 This works like BST insertion first
 Then checks balance factor
 If imbalance occurs → apply rotations
 */
 
-Node* insert(Node* node, int key){
+Node* insert(Node* node, int data) {
 
     // Step 1: Perform normal BST insertion
-    if(node == NULL)
-        return newNode(key);
+    if (node == NULL)
+        return newNode(data);
 
-    if(key < node->key)
-        node->left = insert(node->left, key);
+    if (data < node->data)
+        node->left = insert(node->left, data);
 
-    else if(key > node->key)
-        node->right = insert(node->right, key);
+    else if (data > node->data)
+        node->right = insert(node->right, data);
 
     else
-        return node; // duplicate keys not allowed
+        return node; // duplicate datas not allowed
 
 
     // Step 2: Update height of current node
@@ -409,17 +417,17 @@ Node* insert(Node* node, int key){
 
 
     // Case 1: LL Case
-    if(balance > 1 && key < node->left->key)
+    if (balance > 1 && data < node->left->data)
         return rightRotate(node);
 
 
     // Case 2: RR Case
-    if(balance < -1 && key > node->right->key)
+    if (balance < -1 && data > node->right->data)
         return leftRotate(node);
 
 
     // Case 3: LR Case
-    if(balance > 1 && key > node->left->key){
+    if (balance > 1 && data > node->left->data) {
 
         node->left = leftRotate(node->left);
 
@@ -428,7 +436,7 @@ Node* insert(Node* node, int key){
 
 
     // Case 4: RL Case
-    if(balance < -1 && key < node->right->key){
+    if (balance < -1 && data < node->right->data) {
 
         node->right = rightRotate(node->right);
 
@@ -445,11 +453,11 @@ Preorder traversal of AVL tree
 Used to print tree structure
 */
 
-void preorder(Node* root){
+void preorder(Node* root) {
 
-    if(root != NULL){
+    if (root != NULL) {
 
-        cout << root->key << " ";
+        cout << root->data << " ";
 
         preorder(root->left);
 
@@ -461,7 +469,7 @@ void preorder(Node* root){
 Driver program
 */
 
-int main(){
+int main() {
 
     Node* root = NULL;
 
@@ -476,14 +484,29 @@ int main(){
     root = insert(root, 50);
     root = insert(root, 25);
 
+	// After inserting above elements, the AVL tree will be balanced
+	// The structure of the AVL tree will be:
+	// 	   30
+	//   /  \
+    // 20   40
+	// / \    \
+    //10 25   50
+
+	// The height of the root node (30) will be 2, as it has two levels of children below it.
+	// The preorder traversal will print the nodes in the order: 30, 20, 10, 25, 40, 50
 
     /*
     Print preorder traversal
     */
 
     cout << "Preorder traversal of AVL tree:\n";
-
     preorder(root);
+
+	cout << "\nHeight of root node: " << root->height << endl;
+
+	cout << "Print heights of all nodes:\n";
+	printHeights(root);
+    
 
 }
 ```
